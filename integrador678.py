@@ -58,6 +58,7 @@ class Cuenta(Persona):
     def __init__(self, pNombre, pEdad, pDni,pTitular):
         super().__init__(pNombre, pEdad, pDni)
         self._titular=pTitular
+        self._cantidad
         
     @property
     def titular(self):
@@ -78,7 +79,7 @@ class Cuenta(Persona):
             print("Debe ingresar un monto")
         else:
             self._cantidad+=cantidadIngresada
-            print(f"Estado de Cuenta:${self._cantidad}")
+            print(f"Nuevo estado de Cuenta:${self._cantidad}")
     
     def retirar(self,retiro):
         if retiro<0:
@@ -91,6 +92,53 @@ class Cuenta(Persona):
             
     def mostrar(self):
         print(f"Titular de Cuenta {self._titular}, Saldo de la cuenta:$ {self._cantidad}")
+    
+class CuentaJoven(Cuenta):
+    _bonificacion=0
+    def __init__(self, pNombre, pEdad, pDni, pTitular):
+        super().__init__(pNombre, pEdad, pDni, pTitular)
+        self._bonificacion
+        
+    @property
+    def bonificacion(self):
+        print(f"La Bonificacion de esta cuenta es {self._bonificacion}%")
+        
+    @bonificacion.setter
+    def bonificacion(self,porcentaje):
+        if type(porcentaje)==int or type(porcentaje)==float:
+            if porcentaje<=100 and porcentaje >0:
+                self._bonificacion=porcentaje
+                print(f"El nuevo porcentaje de bonificacion de esta cuenta es {self._bonificacion}")
+            else:
+                print("Ingrese un porcentaje valido (entre 0 y 100)")
+        else:
+            print("Ingrese un porcentaje valido (entre 0 y 100)")
+    def es_titular_valido(self):
+        if self._edad>=18 and self._edad<25:
+            print(f"El titular de esta cuenta {self._titular} esta habilitado para tener el plan Cuenta Joven") 
+            # print(True)     
+            return True
+        
+        else:
+            print(f"El titular de esta cuenta {self._titular} no es elejible para el plan de Cuenta Joven por el limite de edad (25)  ")
+            # print(False)
+            return False
+        
+    def retirar(self,retiro):
+        if self.es_titular_valido()==True:
+            # print("puede retirar")
+            self._cantidad-=retiro
+            print(f"Nuevo estado de cuenta :${self._cantidad}")
+        else:
+            print("no puede retirar, usuario no autorizado")
+    def mostrar(self):
+        print(f"Cuenta Joven, Bonificacion:{self._bonificacion}%")
+        
+            
+    
+    
+    
+    
     
     
 x=Cuenta("juan",42,2855485,"Juan M")
@@ -106,8 +154,19 @@ x=Cuenta("juan",42,2855485,"Juan M")
 y=Persona("Nuria",39,3025485)
 
 #x.cantidad=150000   #asi no se deberia modificar la cantidad
-x.ingresar(20000)
-x.retirar(30000)
-x.cantidad
+# x.ingresar(20000)
+# x.retirar(30000)
+# x.cantidad
+# x.mostrar()
+# y.mostrar()
+o=CuentaJoven("Tirri",22,33555666,"Martin F")
+o.ingresar(50000)
+o.bonificacion=20
+# o.edad=18
+# o.edad
+# o.es_titular_valido()
+# o.mostrar()
+o.retirar(10000)
+o.mostrar()
 x.mostrar()
 y.mostrar()
